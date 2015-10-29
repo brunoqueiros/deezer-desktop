@@ -1,0 +1,12 @@
+{
+  "name": "deezer-wrapper",
+  "version": "0.0.1",
+  "main": "main.js",
+  "devDependencies": {
+    "electron-prebuilt": "^0.34.1"
+  },
+  "dependencies": {
+    "electron-debug": "^0.3.0",
+    "remote": "^0.2.6"
+  }
+}
