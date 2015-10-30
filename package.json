@@ -2,11 +2,13 @@
   "name": "deezer-wrapper",
   "version": "0.0.1",
   "main": "main.js",
+  "scripts": {
+    "start": "NODE_ENV=development ./node_modules/electron-prebuilt/dist/electron ."
+  },
   "devDependencies": {
     "electron-prebuilt": "^0.34.1"
   },
   "dependencies": {
-    "electron-debug": "^0.3.0",
-    "remote": "^0.2.6"
+    "electron-debug": "^0.3.0"
   }
 }
