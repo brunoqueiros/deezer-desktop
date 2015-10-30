@@ -1,32 +1,21 @@
-var app = require('app');  // Module to control application life.
-var BrowserWindow = require('browser-window');  // Module to create native browser window.
-var path = require('path');
+'use strict';
 
-// Report crashes to our server.
+var app = require('app');
+var BrowserWindow = require('browser-window');
+var path = require('path');
+var globalShortcut = require('global-shortcut');
+
 require('electron-debug')();
 require('crash-reporter').start();
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-var mainWindow = null;
+let mainWindow = null;
 
+// Flash plugin
 app.commandLine.appendSwitch('ppapi-flash-path', './plugins/libpepflashplayer.so');
 app.commandLine.appendSwitch('ppapi-flash-version', '16.0.0.305');
 
-// Quit when all windows are closed.
-app.on('window-all-closed', function() {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform != 'darwin') {
-    app.quit();
-  }
-});
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-app.on('ready', function() {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
+function createMainWindow() {
+  const win = new BrowserWindow({
     'width': 1000,
     'height': 650,
     'icon': path.join(__dirname, 'assets', 'logo.png'),
@@ -38,17 +27,44 @@ app.on('ready', function() {
     }
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadUrl('http://deezer.com');
+  win.loadUrl('file://' + __dirname + '/index.html');
 
-  // Open the DevTools.
-  mainWindow.openDevTools();
+  if (process.env.NODE_ENV === 'development') {
+    win.openDevTools();
+  }
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function() {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
+  return win;
+}
+
+function registerShortcut(shortcut, callback) {
+  const ret = globalShortcut.register(shortcut, callback);
+
+  if (!ret) {
+    console.log('registration failed ' + shortcut);
+  }
+}
+
+app.on('window-all-closed', function() {
+  if (process.platform != 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('ready', function() {
+  mainWindow = createMainWindow();
+
+  const page = mainWindow.webContents;
+
+  registerShortcut('ctrl+Space', () => {
+    mainWindow.webContents.send('keypress', 'ctrl+Space');
+  });
+
+  mainWindow.on('app-command', function(e, cmd) {
+    console.log(cmd);
+  });
+
+
+  mainWindow.on('closed', () => {
     mainWindow = null;
   });
 });
