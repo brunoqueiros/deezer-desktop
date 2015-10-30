@@ -60,10 +60,9 @@ app.on('ready', function() {
     mainWindow.webContents.send('keypress', 'ctrl+Space');
   });
 
-  mainWindow.on('app-command', function(e, cmd) {
-    console.log(cmd);
+  page.on('did-finish-load', () => {
+    page.send('did-finish-load');
   });
-
 
   mainWindow.on('closed', () => {
     mainWindow = null;
