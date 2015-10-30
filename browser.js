@@ -1,16 +1,14 @@
 'use strict';
 const ipc = require('ipc');
 
-ipc.on('keypress', (key) => {
-  console.log(key);
+ipc.on('did-finish-load', () => {
+  const deezerHelper = new DeezerHelper();
 
-  if (key === 'ctrl+Space') {
-    var frameDocument = document.getElementById('iframe').contentWindow.document;
+  ipc.on('keypress', (key) => {
+    console.log(key);
 
-    if (frameDocument.querySelector('.control-play')) {
-      frameDocument.querySelector('.control-play').click();
-    } else {
-      frameDocument.querySelector('.control-pause').click();
+    if (key === 'ctrl+Space') {
+      deezerHelper.playPause();
     }
-  }
+  });
 });
