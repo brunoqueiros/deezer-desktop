@@ -16,6 +16,7 @@ app.commandLine.appendSwitch('ppapi-flash-version', '16.0.0.305');
 
 function createMainWindow() {
   const win = new BrowserWindow({
+    'title': 'Deezer',
     'width': 1000,
     'height': 650,
     'icon': path.join(__dirname, 'assets', 'logo.png'),
