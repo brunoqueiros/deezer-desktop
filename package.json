@@ -9,6 +9,7 @@
     "electron-prebuilt": "^0.34.1"
   },
   "dependencies": {
+    "chalk": "^1.1.1",
     "electron-debug": "^0.3.0"
   }
 }
