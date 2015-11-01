@@ -1,14 +1,17 @@
 'use strict';
 const ipc = require('ipc');
+const PlayerHelper = require('./src/player-helper');
 
 ipc.on('did-finish-load', () => {
-  const deezerHelper = new DeezerHelper();
-
   ipc.on('keypress', (key) => {
     console.log(key);
 
     if (key === 'ctrl+Space') {
-      deezerHelper.playPause();
+      PlayerHelper.playPause();
+    }
+
+    if (key === 'repeat') {
+      PlayerHelper.repeat();
     }
   });
 });
