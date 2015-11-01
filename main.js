@@ -75,7 +75,7 @@ function registerShortcuts() {
   });
 
   Shortcuts.register({
-    'key': 'repeat',
+    'key': constants.REPEAT,
     'action': () => {
       DeezerHelper.getCurrentMusic();
     }
