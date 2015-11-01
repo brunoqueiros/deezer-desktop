@@ -3,8 +3,6 @@ const ipc = require('ipc');
 const PlayerHelper = require('./src/player-helper');
 const constants = require('./src/constants');
 
-let track = {};
-
 ipc.on('did-finish-load', () => {
   ipc.on('action', (action) => {
     console.log(action);
@@ -20,5 +18,9 @@ ipc.on('did-finish-load', () => {
     if (action === constants.REPEAT) {
       PlayerHelper.repeat();
     }
+  });
+
+  PlayerHelper.whenTrackChanged((track) => {
+    ipc.send('new-track', track);
   });
 });

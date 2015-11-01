@@ -3,9 +3,12 @@
 const app = require('app');
 const BrowserWindow = require('browser-window');
 const globalShortcut = require('global-shortcut');
+const notifier = require('node-notifier');
+const fs = require('fs');
 
 const Shortcuts = require('./src/shortcuts');
 const constants = require('./src/constants');
+const Logger = require('./src/logger');
 
 require('electron-debug')();
 require('crash-reporter').start();
@@ -34,6 +37,16 @@ function createMainWindow() {
   }
 
   return win;
+}
+
+function createTemporaryFolder() {
+  if (!fs.existsSync(constants.APP_TMP_FOLDER)) {
+    fs.mkdir(constants.APP_TMP_FOLDER, (error) => {
+      if (error) {
+        Logger.error(err);
+      }
+    });
+  }
 }
 
 function registerShortcuts() {
@@ -81,6 +94,16 @@ app.on('ready', function() {
   mainWindow = createMainWindow();
 
   const page = mainWindow.webContents;
+
+  createTemporaryFolder();
+
+  ipc.on('new-track', (event, track) => {
+    notifier.notify({
+      'title': track['track-artist'],
+      'message': track['track-name'],
+      'icon': track['track-cover']
+    });
+  });
 
   page.on('did-finish-load', () => {
     registerShortcuts();
