@@ -1,9 +1,11 @@
 'use strict';
 
-var app = require('app');
-var BrowserWindow = require('browser-window');
-var path = require('path');
-var globalShortcut = require('global-shortcut');
+const app = require('app');
+const BrowserWindow = require('browser-window');
+const globalShortcut = require('global-shortcut');
+
+const Shortcuts = require('./src/shortcuts');
+const constants = require('./src/constants');
 
 require('electron-debug')();
 require('crash-reporter').start();
@@ -16,15 +18,12 @@ app.commandLine.appendSwitch('ppapi-flash-version', '16.0.0.305');
 
 function createMainWindow() {
   const win = new BrowserWindow({
-    'title': 'Deezer',
-    'width': 1000,
-    'height': 650,
-    'icon': path.join(__dirname, 'assets', 'logo.png'),
+    'title': constants.APP_NAME,
+    'width': constants.APP_WIDTH,
+    'height': constants.APP_HEIGHT,
+    'icon': constants.APP_LOGO,
     'web-preferences': {
-      'plugins': true,
-      'web-security': false,
-      'node-integration': false,
-      'preload': path.join(__dirname, 'browser.js')
+      'plugins': true
     }
   });
 
@@ -37,12 +36,37 @@ function createMainWindow() {
   return win;
 }
 
-function registerShortcut(shortcut, callback) {
-  const ret = globalShortcut.register(shortcut, callback);
+function registerShortcuts() {
+  Shortcuts.register({
+    'key': constants.PLAY_PAUSE,
+    'accelerator': 'ctrl+Space',
+    'action': () => {
+      mainWindow.webContents.send('keypress', 'ctrl+Space');
+    }
+  });
 
-  if (!ret) {
-    console.log('registration failed ' + shortcut);
-  }
+  Shortcuts.register({
+    'key': constants.NEXT,
+    'accelerator': 'MediaNextTrack',
+    'action': () => {
+      mainWindow.webContents.send('keypress', 'MediaNextTrack');
+    }
+  });
+
+  Shortcuts.register({
+    'key': constants.PREV,
+    'accelerator': 'MediaPreviousTrack',
+    'action': () => {
+      mainWindow.webContents.send('keypress', 'MediaPreviousTrack');
+    }
+  });
+
+  Shortcuts.register({
+    'key': 'repeat',
+    'action': () => {
+      DeezerHelper.getCurrentMusic();
+    }
+  });
 }
 
 app.on('window-all-closed', function() {
@@ -56,11 +80,9 @@ app.on('ready', function() {
 
   const page = mainWindow.webContents;
 
-  registerShortcut('ctrl+Space', () => {
-    mainWindow.webContents.send('keypress', 'ctrl+Space');
-  });
-
   page.on('did-finish-load', () => {
+    registerShortcuts();
+
     page.send('did-finish-load');
   });
 
