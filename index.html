@@ -9,7 +9,9 @@
     <iframe id="iframe" src="http://deezer.com"></iframe>
 
     <script type="text/javascript">
-      require('./browser')
+      window.onload = function () {
+        require('./browser')
+      };
     </script>
   </body>
 </html>
