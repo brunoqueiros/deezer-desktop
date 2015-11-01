@@ -1,16 +1,23 @@
 'use strict';
 const ipc = require('ipc');
 const PlayerHelper = require('./src/player-helper');
+const constants = require('./src/constants');
+
+let track = {};
 
 ipc.on('did-finish-load', () => {
-  ipc.on('keypress', (key) => {
-    console.log(key);
+  ipc.on('action', (action) => {
+    console.log(action);
 
-    if (key === 'ctrl+Space') {
+    if (action === constants.PLAY_PAUSE) {
       PlayerHelper.playPause();
     }
 
-    if (key === 'repeat') {
+    if (action === constants.NEXT) {
+      PlayerHelper.nextTrack();
+    }
+
+    if (action === constants.REPEAT) {
       PlayerHelper.repeat();
     }
   });

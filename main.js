@@ -39,9 +39,9 @@ function createMainWindow() {
 function registerShortcuts() {
   Shortcuts.register({
     'key': constants.PLAY_PAUSE,
-    'accelerator': 'ctrl+Space',
+    'accelerator': 'MediaPlayPause',
     'action': () => {
-      mainWindow.webContents.send('keypress', 'ctrl+Space');
+      mainWindow.webContents.send('action', constants.PLAY_PAUSE);
     }
   });
 
@@ -49,7 +49,7 @@ function registerShortcuts() {
     'key': constants.NEXT,
     'accelerator': 'MediaNextTrack',
     'action': () => {
-      mainWindow.webContents.send('keypress', 'MediaNextTrack');
+      mainWindow.webContents.send('action', constants.NEXT);
     }
   });
 
@@ -57,7 +57,7 @@ function registerShortcuts() {
     'key': constants.PREV,
     'accelerator': 'MediaPreviousTrack',
     'action': () => {
-      mainWindow.webContents.send('keypress', 'MediaPreviousTrack');
+      mainWindow.webContents.send('action', constants.PREV);
     }
   });
 
@@ -74,6 +74,8 @@ app.on('window-all-closed', function() {
     app.quit();
   }
 });
+
+const ipc = require('ipc');
 
 app.on('ready', function() {
   mainWindow = createMainWindow();
