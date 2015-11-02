@@ -16,7 +16,7 @@ require('crash-reporter').start();
 let mainWindow = null;
 
 // Flash plugin
-app.commandLine.appendSwitch('ppapi-flash-path', './plugins/libpepflashplayer.so');
+app.commandLine.appendSwitch('ppapi-flash-path', constants.FLASH_PLUGIN_PATH);
 app.commandLine.appendSwitch('ppapi-flash-version', '16.0.0.305');
 
 function createMainWindow() {
