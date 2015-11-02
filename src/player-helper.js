@@ -11,7 +11,9 @@ class PlayerHelper {
       'play': doc.querySelector('.control-play'),
       'pause': doc.querySelector('.control-pause'),
       'next': doc.querySelector('.control-next'),
-      'repeat': doc.querySelector('.control-repeat'),
+      'prev': doc.querySelector('.control-prev'),
+      'repeat': doc.querySelector('.control-repeat .icon'),
+      'shuffle': doc.querySelector('.control-shuffle .icon'),
       'track-artist': doc.querySelector('.player-track-title .player-track-link'),
       'track-name': doc.querySelector('.player-track-artist .player-track-link'),
       'track': doc.querySelector('.player-track'),
@@ -28,19 +30,26 @@ class PlayerHelper {
   }
 
   repeat() {
-    if (elements['repeat'].classList.contains('active')) {
-      elements['repeat'].classList.remove('active');
-    } else {
-      elements['repeat'].classList.add('active');
-    }
+    elements['repeat'].click();
+  }
+
+  shuffle() {
+    elements['shuffle'].click();
   }
 
   nextTrack() {
     elements['next'].click();
   }
 
-  getCurrentMusic() {
-    return elements['track-artist'] + ' ' + elements['track-name'];
+  prevTrack() {
+    elements['prev'].click();
+  }
+
+  getCurrentTrack() {
+    return {
+      'track-artist': elements['track-artist'].innerText,
+      'track-name': elements['track-name'].innerText,
+    }
   }
 
   whenTrackChanged(callback) {
