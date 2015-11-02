@@ -13,8 +13,8 @@ class Shortcuts {
     }
 
     if (!shortcutsList[options.key]) {
-      shortcutsList[options.key] = options.actions;
-      Logger.info('shortcut registered ' + options.accelerator);
+      shortcutsList[options.key] = options.action;
+      Logger.info('shortcut registered ' + options.key);
 
       if (options.accelerator) {
         const shortcut = globalShortcut.register(options.accelerator, options.action);
