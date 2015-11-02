@@ -77,7 +77,21 @@ function registerShortcuts() {
   Shortcuts.register({
     'key': constants.REPEAT,
     'action': () => {
-      DeezerHelper.getCurrentMusic();
+      mainWindow.webContents.send('action', constants.REPEAT);
+    }
+  });
+
+  Shortcuts.register({
+    'key': constants.SHUFFLE,
+    'action': () => {
+      mainWindow.webContents.send('action', constants.SHUFFLE);
+    }
+  });
+
+  Shortcuts.register({
+    'key': constants.QUIT,
+    'action': () => {
+      app.quit();
     }
   });
 }
@@ -97,12 +111,14 @@ app.on('ready', function() {
 
   createTemporaryFolder();
 
-  ipc.on('new-track', (event, track) => {
-    notifier.notify({
-      'title': track['track-artist'],
-      'message': track['track-name'],
-      'icon': track['track-cover']
-    });
+  ipc.on('new-track', (event, obj) => {
+    if (obj.notify) {
+      notifier.notify({
+        'title': obj.track['track-artist'],
+        'message': obj.track['track-name'],
+        'icon': obj.track['track-cover']
+      });
+    }
   });
 
   page.on('did-finish-load', () => {
