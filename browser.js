@@ -5,8 +5,6 @@ const constants = require('./src/constants');
 
 ipc.on('did-finish-load', () => {
   ipc.on('action', (action) => {
-    console.log(action);
-
     if (action === constants.PLAY_PAUSE) {
       PlayerHelper.playPause();
     }
@@ -18,9 +16,25 @@ ipc.on('did-finish-load', () => {
     if (action === constants.REPEAT) {
       PlayerHelper.repeat();
     }
+
+    if (action === constants.PREV) {
+      PlayerHelper.prevTrack();
+    }
+
+    if (action === constants.SHUFFLE) {
+      PlayerHelper.shuffle();
+    }
   });
 
   PlayerHelper.whenTrackChanged((track) => {
-    ipc.send('new-track', track);
+    ipc.send('new-track', {
+      'notify': true,
+      'track': track
+    });
+  });
+
+  ipc.send('new-track', {
+    'notify': false,
+    'track': PlayerHelper.getCurrentTrack()
   });
 });
