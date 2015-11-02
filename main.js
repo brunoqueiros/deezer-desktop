@@ -9,6 +9,7 @@ const fs = require('fs');
 const Shortcuts = require('./src/shortcuts');
 const constants = require('./src/constants');
 const Logger = require('./src/logger');
+const TrayMenu = require('./src/tray-menu');
 
 require('electron-debug')();
 require('crash-reporter').start();
@@ -112,6 +113,10 @@ app.on('ready', function() {
   createTemporaryFolder();
 
   ipc.on('new-track', (event, obj) => {
+    TrayMenu.create({
+      'track': obj.track
+    });
+
     if (obj.notify) {
       notifier.notify({
         'title': obj.track['track-artist'],
