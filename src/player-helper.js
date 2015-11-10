@@ -18,11 +18,15 @@ class PlayerHelper {
   }
 
   repeat() {
-    doc.querySelector(constants['CONTROL_REPEAT']).click();
+    if (doc.querySelector(constants['CONTROL_REPEAT'])) {
+      doc.querySelector(constants['CONTROL_REPEAT']).click();
+    }
   }
 
   shuffle() {
-    doc.querySelector(constants['CONTROL_SHUFFLE']).click();
+    if (doc.querySelector(constants['CONTROL_SHUFFLE'])) {
+      doc.querySelector(constants['CONTROL_SHUFFLE']).click();
+    }
   }
 
   nextTrack() {
