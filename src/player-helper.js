@@ -1,8 +1,9 @@
 'use strict';
 const imageDownloader = require('./image-downloader');
 
-var doc = null;
-var elements = {};
+let doc = null;
+let elements = {};
+let selectors = {}
 
 class PlayerHelper {
   constructor() {
@@ -18,6 +19,12 @@ class PlayerHelper {
       'track-name': doc.querySelector('.player-track-artist .player-track-link'),
       'track': doc.querySelector('.player-track'),
       'track-cover': doc.querySelector('.player-cover img')
+    };
+
+    selectors = {
+      'TRACK_ARTIST': '.player-track-title .player-track-link',
+      'TRACK_NAME': '.player-track-title .player-track-link',
+      'TRACK_COVER': '.player-cover img'
     };
   }
 
@@ -47,28 +54,17 @@ class PlayerHelper {
 
   getCurrentTrack() {
     return {
-      'track-artist': elements['track-artist'].innerText,
-      'track-name': elements['track-name'].innerText,
+      'track-artist': doc.querySelector(selectors['TRACK_ARTIST']).innerText,
+      'track-name': doc.querySelector(selectors['TRACK_NAME']).innerText,
     }
   }
 
   whenTrackChanged(callback) {
     let track = {};
 
-    elements['track'].addEventListener('DOMSubtreeModified', (mutation) => {
-      if (mutation.target.nodeName === 'SPAN') {
-        track['track-name'] = mutation.target.innerText;
-      }
-
-      if (mutation.target.nodeName === 'H3') {
-        if (mutation.target.innerText.trim() !== 'by') {
-          track['track-artist'] = mutation.target.innerText.split('by')[1].trim();
-        }
-      }
-    });
-
-    elements['track-cover'].addEventListener('load', (event) => {
+    doc.querySelector(selectors['TRACK_COVER']).addEventListener('load', (event) => {
       imageDownloader.download(event.path[0].src, (filename) => {
+        track = this.getCurrentTrack();
         track['track-cover'] = filename;
 
         callback(track);
