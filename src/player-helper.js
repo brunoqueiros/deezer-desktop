@@ -24,7 +24,15 @@ class PlayerHelper {
     selectors = {
       'TRACK_ARTIST': '.player-track-title .player-track-link',
       'TRACK_NAME': '.player-track-title .player-track-link',
-      'TRACK_COVER': '.player-cover img'
+      'TRACK_COVER': '.player-cover img',
+
+      'CONTROL_PLAY': '.control-play',
+      'CONTROL_PAUSE': '.control-pause',
+      'CONTROL_NEXT': '.control-pause',
+      'CONTROL_NEXT': '.control-next',
+      'CONTROL_PREV': '.control-prev',
+      'CONTROL_REPEAT': '.control-repeat .icon',
+      'CONTROL_SHUFFLE': '.control-shuffle .icon'
     };
   }
 
@@ -37,19 +45,19 @@ class PlayerHelper {
   }
 
   repeat() {
-    elements['repeat'].click();
+    doc.querySelector(selectors['CONTROL_REPEAT']).click();
   }
 
   shuffle() {
-    elements['shuffle'].click();
+    doc.querySelector(selectors['CONTROL_SHUFFLE']).click();
   }
 
   nextTrack() {
-    elements['next'].click();
+    doc.querySelector(selectors['CONTROL_NEXT']).click();
   }
 
   prevTrack() {
-    elements['prev'].click();
+    doc.querySelector(selectors['CONTROL_PREV']).click();
   }
 
   getCurrentTrack() {
