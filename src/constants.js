@@ -19,7 +19,7 @@ const constants = {
 
   PLAYER_IMG_URI: 'deezer.com/images/cover/',
 
-  TRACK_ARTIST: '.player-track-title .player-track-link',
+  TRACK_ARTIST: '.player-track-artist .player-track-link',
   TRACK_NAME: '.player-track-title .player-track-link',
   TRACK_COVER: '.player-cover img',
 
