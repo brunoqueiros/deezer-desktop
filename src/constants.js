@@ -18,6 +18,18 @@ const constants = {
   QUIT: 'quit',
 
   PLAYER_IMG_URI: 'deezer.com/images/cover/',
+
+  TRACK_ARTIST: '.player-track-title .player-track-link',
+  TRACK_NAME: '.player-track-title .player-track-link',
+  TRACK_COVER: '.player-cover img',
+
+  CONTROL_PLAY: '.control-play',
+  CONTROL_PAUSE: '.control-pause',
+  CONTROL_NEXT: '.control-pause',
+  CONTROL_NEXT: '.control-next',
+  CONTROL_PREV: '.control-prev',
+  CONTROL_REPEAT: '.control-repeat .icon',
+  CONTROL_SHUFFLE: '.control-shuffle .icon'
 };
 
 module.exports = constants;
