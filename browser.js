@@ -33,6 +33,10 @@ ipc.on('did-finish-load', () => {
     });
   });
 
+  PlayerHelper.onControlHasClicked((mutation) => {
+    console.log(mutation);
+  });
+
   ipc.send('new-track', {
     'notify': false,
     'track': PlayerHelper.getCurrentTrack()

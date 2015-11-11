@@ -56,6 +56,23 @@ class PlayerHelper {
       });
     });
   }
+
+  onControlHasClicked(callback) {
+    const target = doc.querySelector(constants.CONTROLS);
+    const observer = new MutationObserver((mutations) => {
+      const mutation = mutations[0];
+      if (mutation.attributeName === 'class') {
+        callback(mutation);
+      }
+    });
+    const config = {
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['class']
+    };
+
+    observer.observe(target, config);
+  }
 }
 
 module.exports = new PlayerHelper();

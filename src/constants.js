@@ -25,11 +25,11 @@ const constants = {
 
   CONTROL_PLAY: '.control-play',
   CONTROL_PAUSE: '.control-pause',
-  CONTROL_NEXT: '.control-pause',
   CONTROL_NEXT: '.control-next',
   CONTROL_PREV: '.control-prev',
   CONTROL_REPEAT: '.control-repeat .icon',
-  CONTROL_SHUFFLE: '.control-shuffle .icon'
+  CONTROL_SHUFFLE: '.control-shuffle .icon',
+  CONTROLS: '.player-controls'
 };
 
 module.exports = constants;
