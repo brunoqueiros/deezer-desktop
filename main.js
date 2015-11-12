@@ -114,7 +114,8 @@ app.on('ready', function() {
 
   ipc.on('new-track', (event, obj) => {
     TrayMenu.create({
-      'track': obj.track
+      'track': obj.track,
+      'control': obj.control
     });
 
     if (obj.notify) {
@@ -124,6 +125,13 @@ app.on('ready', function() {
         'icon': obj.track['track-cover']
       });
     }
+  });
+
+  ipc.on('control-has-changed', (event, obj) => {
+    TrayMenu.create({
+      'track': obj.track,
+      'control': obj.control
+    });
   });
 
   page.on('did-finish-load', () => {

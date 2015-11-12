@@ -73,6 +73,10 @@ class PlayerHelper {
 
     observer.observe(target, config);
   }
+
+  isFlowActive() {
+    return doc.querySelector(constants['TAG']) !== null;
+  }
 }
 
 module.exports = new PlayerHelper();

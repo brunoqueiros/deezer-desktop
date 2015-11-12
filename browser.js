@@ -4,6 +4,12 @@ const PlayerHelper = require('./src/player-helper');
 const constants = require('./src/constants');
 
 ipc.on('did-finish-load', () => {
+  let control = {
+    'key': '',
+    'status': 'disable',
+    'control_options': 'active'
+  };
+
   ipc.on('action', (action) => {
     if (action === constants.PLAY_PAUSE) {
       PlayerHelper.playPause();
@@ -29,16 +35,58 @@ ipc.on('did-finish-load', () => {
   PlayerHelper.whenTrackChanged((track) => {
     ipc.send('new-track', {
       'notify': true,
+      'control': control,
       'track': track
     });
   });
 
   PlayerHelper.onControlHasClicked((mutation) => {
-    console.log(mutation);
+    control = {
+      'key': '',
+      'status': 'disable',
+      'control_options': 'active'
+    };
+
+    if (mutation.target.classList.contains('active')) {
+      control['status'] = 'active';
+    }
+
+    if (mutation.target.classList.contains('control-repeat') ||
+        mutation.target.classList.contains('control-repeat-one')) {
+      control['key'] = constants.REPEAT;
+
+      if (mutation.target.classList.contains('control-repeat-one')) {
+        control['status'] = 'disable';
+      }
+    }
+
+    if (mutation.target.classList.contains('control-shuffle')) {
+      control['key'] = constants.SHUFFLE;
+    }
+
+    if (mutation.target.classList.contains('control-play') ||
+        mutation.target.classList.contains('control-pause')) {
+      control['key'] = constants.PLAY_PAUSE;
+      control['status'] = 'active';
+
+      if (mutation.target.classList.contains('control-play')) {
+        control['status'] = 'disable';
+      }
+    }
+
+    if (PlayerHelper.isFlowActive()) {
+      control['control_options'] = 'disable';
+    }
+
+    ipc.send('control-has-changed', {
+      'control': control,
+      'track': PlayerHelper.getCurrentTrack()
+    });
   });
 
   ipc.send('new-track', {
     'notify': false,
+    'control': control,
     'track': PlayerHelper.getCurrentTrack()
   });
 });

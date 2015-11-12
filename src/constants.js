@@ -29,7 +29,8 @@ const constants = {
   CONTROL_PREV: '.control-prev',
   CONTROL_REPEAT: '.control-repeat .icon',
   CONTROL_SHUFFLE: '.control-shuffle .icon',
-  CONTROLS: '.player-controls'
+  CONTROLS: '.player-controls',
+  TAG: '.tag'
 };
 
 module.exports = constants;
