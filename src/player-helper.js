@@ -3,6 +3,7 @@ const imageDownloader = require('./image-downloader');
 const constants = require('./constants');
 
 let doc = null;
+let lastTrackCover = '';
 
 class PlayerHelper {
   constructor() {
@@ -47,14 +48,39 @@ class PlayerHelper {
   whenTrackChanged(callback) {
     let track = {};
 
-    doc.querySelector(constants['TRACK_COVER']).addEventListener('load', (event) => {
-      imageDownloader.download(event.path[0].src, (filename) => {
-        track = this.getCurrentTrack();
-        track['track-cover'] = filename;
+    const target = doc.querySelector(constants['TRACK_NAME']);
+    const observer = new MutationObserver((mutations) => {
+      let isAlbumChanged = false;
+
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-href') {
+          isAlbumChanged = true;
+        }
+      });
+
+      track = this.getCurrentTrack();
+
+      if (isAlbumChanged) {
+        doc.querySelector(constants['TRACK_COVER']).addEventListener('load', (event) => {
+          imageDownloader.download(event.path[0].src, (filename) => {
+            track['track-cover'] = filename;
+            lastTrackCover = filename;
+
+            callback(track);
+          });
+        });
+      } else {
+        track['track-cover'] = lastTrackCover;
 
         callback(track);
-      });
+      }
     });
+    const config = {
+      childList: true,
+      attributes: true
+    };
+
+    observer.observe(target, config);
   }
 
   onControlHasClicked(callback) {
