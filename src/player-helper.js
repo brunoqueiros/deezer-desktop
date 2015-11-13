@@ -1,6 +1,7 @@
 'use strict';
 const imageDownloader = require('./image-downloader');
 const constants = require('./constants');
+const Listener = require('./listener');
 
 let doc = null;
 let lastTrackCover = '';
@@ -61,7 +62,7 @@ class PlayerHelper {
       track = this.getCurrentTrack();
 
       if (isAlbumChanged) {
-        doc.querySelector(constants['TRACK_COVER']).addEventListener('load', (event) => {
+        Listener.one(doc.querySelector(constants['TRACK_COVER']), 'load', (event) => {
           imageDownloader.download(event.path[0].src, (filename) => {
             track['track-cover'] = filename;
             lastTrackCover = filename;
