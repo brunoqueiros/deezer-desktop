@@ -5,6 +5,7 @@ const BrowserWindow = require('browser-window');
 const globalShortcut = require('global-shortcut');
 const notifier = require('node-notifier');
 const fs = require('fs');
+const path = require('path');
 
 const Shortcuts = require('./src/shortcuts');
 const constants = require('./src/constants');
@@ -27,11 +28,16 @@ function createMainWindow() {
     'height': constants.APP_HEIGHT,
     'icon': constants.APP_LOGO,
     'web-preferences': {
-      'plugins': true
+      'plugins': true,
+      'node-integration': false,
+
+      'preload': path.join(__dirname, 'browser.js')
     }
   });
 
-  win.loadUrl('file://' + __dirname + '/index.html');
+  win.loadUrl('http://deezer.com', {
+    'userAgent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko'
+  });
 
   if (process.env.NODE_ENV === 'development') {
     win.openDevTools();

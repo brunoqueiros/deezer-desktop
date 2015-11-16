@@ -8,7 +8,7 @@ let lastTrackCover = '';
 
 class PlayerHelper {
   constructor() {
-    doc = document.getElementById('iframe').contentWindow.document;
+    doc = document;
   }
 
   playPause() {
