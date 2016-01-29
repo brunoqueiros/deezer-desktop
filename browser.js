@@ -1,7 +1,11 @@
 'use strict';
+
+const _ = require('lodash');
 const ipc = require('ipc');
 const PlayerHelper = require('./src/player-helper');
 const constants = require('./src/constants');
+
+const DEBOUNCE_TIME = 2000;
 
 ipc.on('did-finish-load', () => {
   let control = {
@@ -32,13 +36,15 @@ ipc.on('did-finish-load', () => {
     }
   });
 
-  PlayerHelper.whenTrackChanged((track) => {
+  const sendNewTrack = _.debounce((track) => {
     ipc.send('new-track', {
       'notify': true,
       'control': control,
       'track': track
     });
-  });
+  }, DEBOUNCE_TIME);
+
+  PlayerHelper.whenTrackChanged(sendNewTrack);
 
   PlayerHelper.onControlHasClicked((mutation) => {
     control = {
