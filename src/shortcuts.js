@@ -13,8 +13,8 @@ class Shortcuts {
     }
 
     if (!shortcutsList[options.key]) {
-      shortcutsList[options.key] = options.action;
-      Logger.info('shortcut registered ' + options.key);
+      shortcutsList[options.key] = options;
+      Logger.info('shortcut registered ' + options.key + " " + options.accelerator);
 
       if (options.accelerator) {
         const shortcut = globalShortcut.register(options.accelerator, options.action);
@@ -24,7 +24,10 @@ class Shortcuts {
         }
       }
     } else {
-      Logger.error('Already have a shortcut key ' + options.key);
+      if (options.hasOwnProperty('accelerator')) {
+        this.unregister(options);
+        this.register(options);
+      }
     }
   }
 
@@ -36,6 +39,12 @@ class Shortcuts {
 
   getAll() {
     console.log(shortcutsList);
+  }
+
+  unregister(options) {
+    globalShortcut.unregister(shortcutsList[options.key].accelerator);
+    delete shortcutsList[options.key];
+    Logger.info('shortcut unregistered ' + options.key);
   }
 }
 
