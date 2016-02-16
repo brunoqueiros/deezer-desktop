@@ -4,13 +4,118 @@
     <meta charset="utf-8">
     <title></title>
     <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+      legend {
+        font: bold 14px arial;
+        border-bottom: solid 1px #dfdfdf;
+        padding-bottom: 8px;
+        margin-bottom: 15px;
+        color: #3b3b3b;
+        width: 100%;
+      }
+
+      fieldset {
+        border: 0;
+      }
+
+      .form-inline {
+        overflow: auto;
+        zoom: 1;
+      }
+
+      .form-inline label {
+        float: left;
+        width: 140px;
+        height: 19px;
+        text-align: right;
+        font-size: 12px;
+        padding: 6px 29px 0 0;
+      }
+
+      .form-inline select {
+        float: left;
+        background: #e8e8e8;
+        border-top: 1px solid #ccc;
+        border-left: 1px solid #d5d5d5;
+        border-right: 1px solid #d5d5d5;
+        border-bottom: 1px solid #dfdfdf;
+        width: 200px;
+        margin-bottom: 10px;
+        padding: 4px;
+        color: #666;
+        font-size: 12px;
+      }
+
+      .btn {
+        background-color: #007FEB;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #FFFFFF;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 12px;
+        padding: 7px 12px;
+        position: relative;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .btn:hover {
+        background-color: #0B66CDB;
+      }
+    </style>
   </head>
   <body>
-    <iframe id="iframe" src="http://deezer.com"></iframe>
+    <form>
+      <fieldset>
+        <legend>Shortcuts</legend>
+
+        <div class="form-inline">
+          <label for="play_pause">Play/Pause</label>
+          <select name="play_pause" id="play_pause">
+            <option value="MediaPlayPause">MediaPlayPause</option>
+            <option value="Ctrl+Enter">Ctrl+Enter</option>
+            <option value="Ctrl+Space">Ctrl+Space</option>
+            <option value="Alt+Enter">Alt+Enter</option>
+            <option value="Alt+Space">Alt+Space</option>
+            <option value="Shift+Enter">Shift+Enter</option>
+            <option value="Shift+Space">Shift+Space</option>
+          </select>
+        </div>
+
+        <div class="form-inline">
+          <label for="next">Next</label>
+          <select name="next" id="next">
+            <option value="MediaNextTrack">MediaNextTrack</option>
+            <option value="Ctrl+Enter">Ctrl+Enter</option>
+            <option value="Ctrl+Space">Ctrl+Space</option>
+            <option value="Alt+Enter">Alt+Enter</option>
+            <option value="Alt+Space">Alt+Space</option>
+            <option value="Shift+Enter">Shift+Enter</option>
+            <option value="Shift+Space">Shift+Space</option>
+          </select>
+        </div>
+
+        <div class="form-inline">
+          <label for="prev">Previous</label>
+          <select name="prev" id="prev">
+            <option value="MediaPreviousTrack">MediaPreviousTrack</option>
+            <option value="Ctrl+Enter">Ctrl+Enter</option>
+            <option value="Ctrl+Space">Ctrl+Space</option>
+            <option value="Alt+Enter">Alt+Enter</option>
+            <option value="Alt+Space">Alt+Space</option>
+            <option value="Shift+Enter">Shift+Enter</option>
+            <option value="Shift+Space">Shift+Space</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <input type="submit" value="Save" class="btn" id="js-save-preferences">
+    </form>
 
     <script type="text/javascript">
       window.onload = function () {
-        require('./browser')
+        require('./preferences')
       };
     </script>
   </body>

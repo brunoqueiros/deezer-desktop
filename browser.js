@@ -4,6 +4,7 @@ const _ = require('lodash');
 const ipc = require('ipc');
 const PlayerHelper = require('./src/player-helper');
 const constants = require('./src/constants');
+const storage = require('./src/storage');
 
 const DEBOUNCE_TIME = 2000;
 
@@ -94,5 +95,11 @@ ipc.on('did-finish-load', () => {
     'notify': false,
     'control': control,
     'track': PlayerHelper.getCurrentTrack()
+  });
+
+  ipc.send('save-preferences', {
+    'play_pause': storage.get('play_pause') || constants.DEFAULT_SHORTCUTS.PLAY_PAUSE,
+    'next': storage.get('next') || constants.DEFAULT_SHORTCUTS.NEXT,
+    'prev': storage.get('prev') || constants.DEFAULT_SHORTCUTS.PREV
   });
 });

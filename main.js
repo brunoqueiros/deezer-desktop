@@ -6,6 +6,8 @@ const globalShortcut = require('global-shortcut');
 const notifier = require('node-notifier');
 const fs = require('fs');
 const path = require('path');
+const ipc = require('ipc');
+const Menu = require('electron').Menu;
 
 const Shortcuts = require('./src/shortcuts');
 const constants = require('./src/constants');
@@ -15,6 +17,7 @@ const TrayMenu = require('./src/tray-menu');
 require('electron-debug')();
 require('crash-reporter').start();
 
+let prefWindow;
 let mainWindow = null;
 
 // Flash plugin
@@ -27,9 +30,9 @@ function createMainWindow() {
     'width': constants.APP_WIDTH,
     'height': constants.APP_HEIGHT,
     'icon': constants.APP_LOGO,
-    'web-preferences': {
+    'webPreferences': {
       'plugins': true,
-      'node-integration': false,
+      'nodeIntegration': false,
 
       'preload': path.join(__dirname, 'browser.js')
     }
@@ -56,10 +59,10 @@ function createTemporaryFolder() {
   }
 }
 
-function registerShortcuts() {
+function registerShortcuts(obj) {
   Shortcuts.register({
     'key': constants.PLAY_PAUSE,
-    'accelerator': 'MediaPlayPause',
+    'accelerator': obj.play_pause,
     'action': () => {
       mainWindow.webContents.send('action', constants.PLAY_PAUSE);
     }
@@ -67,7 +70,7 @@ function registerShortcuts() {
 
   Shortcuts.register({
     'key': constants.NEXT,
-    'accelerator': 'MediaNextTrack',
+    'accelerator': obj.next,
     'action': () => {
       mainWindow.webContents.send('action', constants.NEXT);
     }
@@ -75,7 +78,7 @@ function registerShortcuts() {
 
   Shortcuts.register({
     'key': constants.PREV,
-    'accelerator': 'MediaPreviousTrack',
+    'accelerator': obj.prev,
     'action': () => {
       mainWindow.webContents.send('action', constants.PREV);
     }
@@ -109,13 +112,44 @@ app.on('window-all-closed', function() {
   }
 });
 
-const ipc = require('ipc');
+function createPrefWindow() {
+  prefWindow = new BrowserWindow({
+    width: 420,
+    height: 400,
+    show: false
+  });
+  prefWindow.loadUrl('file://' + __dirname + '/index.html');
+  prefWindow.on('closed', () => {
+    prefWindow = null;
+  });
+  prefWindow.show();
+}
+
+function createMenu() {
+  const template = [
+    {
+      label: 'Edit',
+      submenu: [
+        {
+          label: 'Preferences',
+          click() {
+            createPrefWindow();
+          }
+        }
+      ]
+    }
+  ];
+
+  const menuItem = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menuItem);
+}
 
 app.on('ready', function() {
   mainWindow = createMainWindow();
 
   const page = mainWindow.webContents;
 
+  createMenu();
   createTemporaryFolder();
 
   ipc.on('new-track', (event, obj) => {
@@ -141,7 +175,9 @@ app.on('ready', function() {
   });
 
   page.on('did-finish-load', () => {
-    registerShortcuts();
+    ipc.on('save-preferences', (event, obj) => {
+      registerShortcuts(obj);
+    });
 
     page.send('did-finish-load');
   });
