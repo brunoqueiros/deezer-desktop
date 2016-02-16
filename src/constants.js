@@ -30,7 +30,13 @@ const constants = {
   CONTROL_REPEAT: '.control-repeat .icon',
   CONTROL_SHUFFLE: '.control-shuffle .icon',
   CONTROLS: '.player-controls',
-  TAG: '.tag'
+  TAG: '.tag',
+
+  DEFAULT_SHORTCUTS: {
+    PLAY_PAUSE: 'MediaPlayPause',
+    NEXT: 'MediaNextTrack',
+    PREV: 'MediaPreviousTrack'
+  }
 };
 
 module.exports = constants;
