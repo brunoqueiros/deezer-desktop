@@ -33,7 +33,7 @@ class Shortcuts {
 
   send(key) {
     if (shortcutsList[key]) {
-      shortcutsList[key]();
+      shortcutsList[key].action();
     }
   }
 
