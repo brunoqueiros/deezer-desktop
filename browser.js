@@ -1,7 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-const ipc = require('ipc');
+const ipc = require('electron').ipcRenderer;
 const PlayerHelper = require('./src/player-helper');
 const constants = require('./src/constants');
 const storage = require('./src/storage');
@@ -15,24 +15,24 @@ ipc.on('did-finish-load', () => {
     'control_options': 'active'
   };
 
-  ipc.on('action', (action) => {
-    if (action === constants.PLAY_PAUSE) {
+  ipc.on('action', (event, type) => {
+    if (type === constants.PLAY_PAUSE) {
       PlayerHelper.playPause();
     }
 
-    if (action === constants.NEXT) {
+    if (type === constants.NEXT) {
       PlayerHelper.nextTrack();
     }
 
-    if (action === constants.REPEAT) {
+    if (type === constants.REPEAT) {
       PlayerHelper.repeat();
     }
 
-    if (action === constants.PREV) {
+    if (type === constants.PREV) {
       PlayerHelper.prevTrack();
     }
 
-    if (action === constants.SHUFFLE) {
+    if (type === constants.SHUFFLE) {
       PlayerHelper.shuffle();
     }
   });

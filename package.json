@@ -5,12 +5,10 @@
   "scripts": {
     "start": "NODE_ENV=development ./node_modules/electron-prebuilt/dist/electron ."
   },
-  "devDependencies": {
-    "electron-prebuilt": "^0.34.1"
-  },
   "dependencies": {
     "chalk": "^1.1.1",
     "electron-debug": "^0.3.0",
+    "electron-prebuilt": "^0.37.5",
     "lodash": "^4.0.1",
     "node-notifier": "^4.3.1",
     "request": "^2.65.0"

@@ -6,7 +6,7 @@ const globalShortcut = require('global-shortcut');
 const notifier = require('node-notifier');
 const fs = require('fs');
 const path = require('path');
-const ipc = require('ipc');
+const ipc = require('electron').ipcMain;
 const Menu = require('electron').Menu;
 
 const Shortcuts = require('./src/shortcuts');
@@ -38,7 +38,7 @@ function createMainWindow() {
     }
   });
 
-  win.loadUrl('http://deezer.com', {
+  win.loadURL('http://deezer.com', {
     'userAgent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko'
   });
 
@@ -118,7 +118,7 @@ function createPrefWindow() {
     height: 400,
     show: false
   });
-  prefWindow.loadUrl('file://' + __dirname + '/index.html');
+  prefWindow.loadURL('file://' + __dirname + '/index.html');
   prefWindow.on('closed', () => {
     prefWindow = null;
   });
