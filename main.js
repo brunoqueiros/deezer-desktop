@@ -178,11 +178,85 @@ app.on('ready', function() {
     ipc.on('save-preferences', (event, obj) => {
       registerShortcuts(obj);
     });
-
     page.send('did-finish-load');
   });
+
+    ipc.on('canigoback', function(event, arg) {
+        console.log(arg);  // prints "ping"
+        event.returnValue = page.canGoBack();
+    });
+
+    setInterval(function(){
+        var js =  'window.canigoback='+page.canGoBack()+';';
+        js =  js+'window.canGoForward='+page.canGoForward()+';';
+        page.executeJavaScript(js);
+    },200);
+
+
+    page.on('dom-ready', () => {
+        var JS = `
+    window.superbackmenu = function(){
+        
+        previous = document.getElementById('superbackmenu');
+        if(previous){
+            window.document.body.removeChild(previous);
+        }
+        var d = document.createElement("div");
+        d.id = 'superbackmenu';
+        d.style='z-index:1999999; position : absolute; left: 10px;top 0px;' ;
+        
+        var back = "";
+        var forward = "" ;
+        
+        if(window.canigoback){
+            back = '<span class="icon icon-carousel-left" style="font-size:32px;cursor:pointer;" onclick="window.history.back();" title="Back" ></span>'; 
+        }else{
+           back = '<span class="icon icon-carousel-left" style="font-size:32px;opacity: 0.3"  title="Back" ></span>' ;
+        }
+        if(window.canGoForward){
+            forward = '<span class="icon icon-carousel-right" style="font-size:32px;cursor:pointer;" title="Forward" onclick="window.history.forward();" ></span>'; 
+        }else{
+           forward = '<span class="icon icon-carousel-right" style="font-size:32px;opacity: 0.3" title="Forward"  ></span>';
+        }
+        d.innerHTML= back+forward ;
+      
+        window.document.body.appendChild(d);
+        document.getElementsByClassName('logo logo-deezer')[0].style='margin-left:60px';
+    }
+        var YesICan = false; 
+        var YesICanForward = false ;
+        setInterval(function(){
+            if(window.canigoback !== YesICan){
+                YesICan = window.canigoback ;
+                window.superbackmenu();
+            }
+            if(window.canGoForward !== YesICanForward){
+                YesICan = window.canigoback ;
+                window.superbackmenu();
+            }
+        },200);
+        
+        
+        setTimeout(function(){
+            window.superbackmenu();
+            Events.subscribe('EVENT.NAVIGATION.page_changed', function() {
+              window.superbackmenu();               
+            });
+        },500);
+    
+    
+    `;
+
+    page.executeJavaScript(JS);
+});
+
+
+
+
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+
 });
