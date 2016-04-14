@@ -53,7 +53,7 @@ function createTemporaryFolder() {
   if (!fs.existsSync(constants.APP_TMP_FOLDER)) {
     fs.mkdir(constants.APP_TMP_FOLDER, (error) => {
       if (error) {
-        Logger.error(err);
+        Logger.error(error);
       }
     });
   }
