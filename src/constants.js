@@ -6,7 +6,7 @@ const constants = {
   APP_WIDTH: 1000,
   APP_HEIGHT: 650,
   APP_LOGO: path.join(__dirname, '../assets', 'logo.png'),
-  APP_TMP_FOLDER: path.join(__dirname, '../.tmp'),
+  APP_TMP_FOLDER: '/tmp/deezer-desktop',
   FLASH_PLUGIN_PATH: path.join(__dirname, '../plugins', 'libpepflashplayer.so'),
 
   PLAY_PAUSE: 'play-pause',
