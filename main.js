@@ -1,21 +1,14 @@
 'use strict';
 
-const app = require('app');
-const BrowserWindow = require('browser-window');
-const globalShortcut = require('global-shortcut');
+const { app, BrowserWindow, globalShortcut, Menu, ipcMain } = require('electron');
 const notifier = require('node-notifier');
 const fs = require('fs');
 const path = require('path');
-const ipc = require('electron').ipcMain;
-const Menu = require('electron').Menu;
 
 const Shortcuts = require('./src/shortcuts');
 const constants = require('./src/constants');
 const Logger = require('./src/logger');
 const TrayMenu = require('./src/tray-menu');
-
-require('electron-debug')();
-require('crash-reporter').start();
 
 let prefWindow;
 let mainWindow = null;
@@ -32,8 +25,7 @@ function createMainWindow() {
     'icon': constants.APP_LOGO,
     'webPreferences': {
       'plugins': true,
-      'nodeIntegration': false,
-
+      'nodeIntegration': true,
       'preload': path.join(__dirname, 'browser.js')
     }
   });
@@ -152,7 +144,12 @@ app.on('ready', function() {
   createMenu();
   createTemporaryFolder();
 
-  ipc.on('new-track', (event, obj) => {
+ipcMain.on('asynchronous-message', (event, arg) => {
+    console.log(arg);  // prints "ping"
+    event.sender.send('asynchronous-reply', 'pong');
+  });
+
+  ipcMain.on('new-track', (event, obj) => {
     TrayMenu.create({
       'track': obj.track,
       'control': obj.control
@@ -167,7 +164,7 @@ app.on('ready', function() {
     }
   });
 
-  ipc.on('control-has-changed', (event, obj) => {
+  ipcMain.on('control-has-changed', (event, obj) => {
     TrayMenu.create({
       'track': obj.track,
       'control': obj.control
@@ -175,7 +172,7 @@ app.on('ready', function() {
   });
 
   page.on('did-finish-load', () => {
-    ipc.on('save-preferences', (event, obj) => {
+    ipcMain.on('save-preferences', (event, obj) => {
       registerShortcuts(obj);
     });
 

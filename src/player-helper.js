@@ -1,4 +1,5 @@
 'use strict';
+
 const imageDownloader = require('./image-downloader');
 const constants = require('./constants');
 const Listener = require('./listener');

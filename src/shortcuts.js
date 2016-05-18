@@ -1,6 +1,6 @@
 'use strict';
 
-const globalShortcut = require('global-shortcut');
+const { globalShortcut } = require('electron');
 const path = require('path');
 const Logger = require('./logger');
 

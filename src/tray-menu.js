@@ -1,6 +1,6 @@
 'use strict';
-const Tray = require('tray');
-const Menu = require('menu');
+
+const { Tray, Menu } = require('electron');
 const constants = require('./constants');
 const menuItems = require('./menu-itens');
 

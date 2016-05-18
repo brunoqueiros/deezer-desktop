@@ -1,6 +1,6 @@
 'use strict';
 
-const ipc = require('ipc');
+const { ipcRenderer } = require('electron');
 const storage = require('./src/storage');
 
 document.querySelector('#js-save-preferences').addEventListener('click', () => {
@@ -8,7 +8,7 @@ document.querySelector('#js-save-preferences').addEventListener('click', () => {
   storage.set('next', document.querySelector('#next').value);
   storage.set('prev', document.querySelector('#prev').value);
 
-  ipc.send('save-preferences', {
+  ipcRenderer.send('save-preferences', {
     'play_pause': document.querySelector('#play_pause').value,
     'next': document.querySelector('#next').value,
     'prev': document.querySelector('#prev').value

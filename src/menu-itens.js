@@ -1,4 +1,5 @@
 'use strict';
+
 const Shortcuts = require('./shortcuts');
 const constants = require('./constants');
 
